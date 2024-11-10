@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import store.domain.vo.PromotionQueryResult;
-import store.domain.vo.Quantity;
+import store.domain.vo.*;
 
 import java.time.LocalDate;
 
@@ -107,6 +106,85 @@ class PromotionTest {
                     new Quantity(applied),
                     new Quantity(notApplied)
             ));
+        }
+    }
+
+    @Nested
+    class 프로모션_옵션_반환_테스트 {
+        Promotion promotion = new Promotion(
+                new Name("이름"),
+                new Quantity(2),
+                new Quantity(1),
+                LocalDate.now(),
+                LocalDate.now().plusDays(1)
+        );
+
+        @Test
+        @DisplayName("프로모션 제품을 증정받을 수 있는 경우 추가 옵션을 반환한다.")
+        void 추가_옵션_반환() {
+            // given
+            Quantity orderQuantity = new Quantity(5);
+            Inventory inventory = new Inventory(
+                    new Quantity(6),
+                    Quantity.ZERO
+            );
+
+            // when
+            PromotionOption promotionOption = promotion.getPromotionOption(orderQuantity, inventory);
+
+            // then
+            assertThat(promotionOption).isEqualTo(PromotionOption.ADD_FREE);
+        }
+
+        @Test
+        @DisplayName("재고 부족으로 정가 구매가 필요한 경우 정가 구매 옵션을 반환한다.")
+        void 정가_옵션_반환() {
+            // given
+            Quantity orderQuantity = new Quantity(5);
+            Inventory inventory = new Inventory(
+                    new Quantity(3),
+                    new Quantity(2)
+            );
+
+            // when
+            PromotionOption promotionOption = promotion.getPromotionOption(orderQuantity, inventory);
+
+            // then
+            assertThat(promotionOption).isEqualTo(PromotionOption.REGULAR_PURCHASE);
+        }
+
+        @Test
+        @DisplayName("재고가 부족한 경우에는 NONE 옵션을 반환한다.")
+        void 재고_부족_NONE_옵션_반환() {
+            // given
+            Quantity orderQuantity = new Quantity(5);
+            Inventory inventory = new Inventory(
+                    new Quantity(2),
+                    new Quantity(2)
+            );
+
+            // when
+            PromotionOption promotionOption = promotion.getPromotionOption(orderQuantity, inventory);
+
+            // then
+            assertThat(promotionOption).isEqualTo(PromotionOption.NONE);
+        }
+
+        @Test
+        @DisplayName("프로모션 재고 범위 내에 주문한 경우에는 NONE 옵션을 반환한다.")
+        void 재고_충분_NONE_옵션_반환() {
+            // given
+            Quantity orderQuantity = new Quantity(6);
+            Inventory inventory = new Inventory(
+                    new Quantity(10),
+                    new Quantity(0)
+            );
+
+            // when
+            PromotionOption promotionOption = promotion.getPromotionOption(orderQuantity, inventory);
+
+            // then
+            assertThat(promotionOption).isEqualTo(PromotionOption.NONE);
         }
     }
 }
