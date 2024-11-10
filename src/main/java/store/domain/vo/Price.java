@@ -1,5 +1,8 @@
 package store.domain.vo;
 
+import store.infrastructure.constant.ExceptionMessage;
+import store.infrastructure.exception.CustomException;
+
 public record Price(int value) {
     public static final int MIN = 10;
     public static final int MAX = 1_000_000;
@@ -8,9 +11,17 @@ public record Price(int value) {
         validatePrice(value);
     }
 
+    public static Price from(String input) {
+        try {
+            return new Price(Integer.parseInt(input.trim()));
+        } catch (NumberFormatException e) {
+            throw new CustomException(ExceptionMessage.WRONG_INTEGER_FORMAT.message());
+        }
+    }
+
     private void validatePrice(int value) {
         if (value < MIN || value > MAX) {
-            throw new IllegalArgumentException("[ERROR] 상품 가격은 10 ~ 1,000,000 사이 숫자만 가능합니다.");
+            throw new CustomException(ExceptionMessage.WRONG_PRICE_RANGE.message());
         }
     }
 
