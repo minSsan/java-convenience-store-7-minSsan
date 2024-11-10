@@ -3,6 +3,7 @@ package store.domain;
 import camp.nextstep.edu.missionutils.DateTimes;
 import store.domain.vo.*;
 import store.infrastructure.constant.ExceptionMessage;
+import store.domain.vo.PromotionOption;
 
 import java.time.LocalDate;
 
@@ -44,6 +45,24 @@ public record Promotion(Name name, Quantity buyQuantity, Quantity getQuantity, L
         Quantity appliedQuantity = getAppliedQuantity(giftedQuantity);
         Quantity notAppliedQuantity = quantity.subtract(appliedQuantity);
         return new PromotionQueryResult(giftedQuantity, appliedQuantity, notAppliedQuantity);
+    }
+
+    public PromotionOption getPromotionOption(Quantity quantity, Inventory inventory) {
+        if (!isApplicable() || quantity.value() > inventory.getTotal()) return PromotionOption.NONE;
+
+        PromotionQueryResult queryResult = getQueryResult(Quantity.min(quantity, inventory.promotion()));
+        if (isPossibleAddFree(quantity, inventory, queryResult.nonApplied())) {
+            return PromotionOption.ADD_FREE;
+        }
+        if (quantity.subtract(queryResult.applied()).value() > 0) {
+            return PromotionOption.REGULAR_PURCHASE;
+        }
+        return PromotionOption.NONE;
+    }
+
+    private boolean isPossibleAddFree(Quantity quantity, Inventory inventory, Quantity notApplied) {
+        return notApplied.equals(buyQuantity)
+                 && quantity.sum(getQuantity).value() <= inventory.promotion().value();
     }
 
     private Quantity getGiftedQuantity(Quantity quantity) {
