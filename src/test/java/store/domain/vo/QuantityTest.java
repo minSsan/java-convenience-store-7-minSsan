@@ -17,7 +17,7 @@ class QuantityTest {
 
         // when & then
         assertThatIllegalArgumentException().isThrownBy(() -> {
-            Quantity.from(input);
+            Quantity.of(input);
         });
     }
 

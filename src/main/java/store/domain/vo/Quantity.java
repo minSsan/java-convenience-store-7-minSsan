@@ -12,7 +12,12 @@ public record Quantity(int value) {
         validateQuantityRange(value);
     }
 
-    public static Quantity from(String input) {
+    public static Quantity of(String input) {
+        try {
+            return new Quantity(Integer.parseInt(input));
+        } catch (NumberFormatException e) {
+            throw new CustomException(ExceptionMessage.WRONG_INTEGER_FORMAT.message());
+        }
     }
 
     private void validateQuantityRange(int value) {
@@ -22,9 +27,15 @@ public record Quantity(int value) {
     }
 
     public Quantity subtract(Quantity quantity) {
+        if (quantity.value > value) {
+            throw new IllegalStateException("기존 수량보다 큰 값을 뺄 수 없습니다.");
+        }
+        return new Quantity(value - quantity.value());
     }
 
     public Quantity sum(Quantity other) {
+        final int result = value + other.value();
+        return new Quantity(result);
     }
 
     @Override
