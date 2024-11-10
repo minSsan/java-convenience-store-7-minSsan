@@ -6,6 +6,8 @@ import store.service.strategy.ExcludeNonApplicablePromotionStrategy;
 import store.service.strategy.ImmutableOrderPromotionStrategy;
 import store.service.strategy.PromotionStrategy;
 
+import java.util.Arrays;
+
 public enum PromotionStrategyProvider {
     ADD_FREE_AGREE(PromotionOption.ADD_FREE, true, new AddFreePromotionStrategy()),
     ADD_FREE_DISAGREE(PromotionOption.ADD_FREE, false, new ImmutableOrderPromotionStrategy()),
@@ -27,6 +29,13 @@ public enum PromotionStrategyProvider {
     }
 
     public static PromotionStrategy from(PromotionOption option, boolean answer) {
-        return null;
+        PromotionStrategyProvider strategyProvider = Arrays.stream(values())
+                .filter(value -> value.option.equals(option) && value.answer == answer)
+                .findFirst()
+                .orElse(null);
+        if (strategyProvider == null) {
+            return new ImmutableOrderPromotionStrategy();
+        }
+        return strategyProvider.strategy;
     }
 }
