@@ -30,11 +30,21 @@ class OrderValidatorTest {
 
     class FixedProductRepository implements ProductRepository {
         @Override
+        public Promotion findPromotionByName(Name name) {
+            return null;
+        }
+
+        @Override
         public Product findByName(Name name) {
             if (name.equals(existProductName)) {
                 return new Product(existProductName, new Price(1000));
             }
             return null;
+        }
+
+        @Override
+        public void save(Product product, Promotion promotion) {
+
         }
     }
 
