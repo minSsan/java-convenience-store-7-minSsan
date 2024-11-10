@@ -11,6 +11,7 @@ public enum ExceptionMessage {
     WRONG_PROMOTION_DATE("프로모션 기간이 올바르게 설정되지 않았습니다."),
     WRONG_PROMOTION_GET_COUNT(String.format("현재 프로모션의 추가 상품은 %,d개만 가능합니다.", Promotion.GET)),
     EXCEED_ORDER_COUNT("재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요."),
+    WRONG_INPUT_FORMAT("올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요."),
     ;
 
     private final String message;
