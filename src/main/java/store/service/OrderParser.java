@@ -3,6 +3,7 @@ package store.service;
 import store.domain.vo.Name;
 import store.domain.vo.Order;
 import store.domain.vo.Quantity;
+import store.infrastructure.constant.Delimiter;
 import store.infrastructure.constant.ExceptionMessage;
 import store.infrastructure.exception.CustomException;
 
@@ -11,12 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class OrderParser {
-    private final static String ORDER_DELIMITER = "-";
-    private final static String ORDERS_DELIMITER = ",";
-    private final static String ORDER_REGEX = "^\\[[a-zA-Z가-힣]+" + ORDER_DELIMITER + "\\d+\\]";
+    private final static String ORDER_REGEX =
+            "^\\[[a-zA-Z가-힣]+" + Delimiter.ORDER_MENU_DELIMITER + "\\d+\\]";
 
     public List<Order> from(String input) {
-        String[] split = input.split(ORDERS_DELIMITER);
+        String[] split = input.split(Delimiter.ORDERS_SPLIT_DELIMITER);
         List<String> orderStrings = Arrays.stream(split).map(String::trim).toList();
         validateOrderFormat(orderStrings);
         List<Order> orders = orderStrings.stream()
@@ -47,7 +47,7 @@ public class OrderParser {
     }
 
     private Order parseStringToOrder(String input) {
-        String[] split = input.split(ORDER_DELIMITER);
+        String[] split = input.split(Delimiter.ORDER_MENU_DELIMITER);
         Name name = new Name(split[0]);
         Quantity quantity = Quantity.of(split[1]);
         return new Order(name, quantity);
