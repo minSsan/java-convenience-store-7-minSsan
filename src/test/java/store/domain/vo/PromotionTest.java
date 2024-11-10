@@ -15,8 +15,7 @@ class PromotionTest {
     private final String name = "상품명";
 
     @Nested
-    @DisplayName("생성자 검증 테스트")
-    class ConstructorTest {
+    class 생성자_검증_테스트 {
         @Test
         @DisplayName("[예외] 프로모션 종료 기간은 시작 기간을 앞설 수 없다.")
         void 프로모션_기간_유효성_검증() {
@@ -46,8 +45,7 @@ class PromotionTest {
     }
 
     @Nested
-    @DisplayName("프로모션 기간 판별")
-    class Applicable {
+    class 프로모션_기간_판별_테스트 {
         @Test
         @DisplayName("현재 시점을 기준으로 적용 불가능한 프로모션을 판별할 수 있다.")
         void 적용_불가능한_프로모션_기간_확인() {
@@ -80,8 +78,7 @@ class PromotionTest {
     }
 
     @Nested
-    @DisplayName("프로모션 쿼리 실행 결과 검증")
-    class QueryResultTest {
+    class 프로모션_쿼리_결과_테스트 {
         @ParameterizedTest
         @DisplayName("올바른 프로모션 적용 결과를 반환할 수 있다.")
         @CsvSource(value = {
