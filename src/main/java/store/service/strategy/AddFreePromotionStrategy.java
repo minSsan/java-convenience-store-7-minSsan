@@ -3,6 +3,8 @@ package store.service.strategy;
 import store.domain.vo.Inventory;
 import store.domain.vo.Order;
 import store.domain.Promotion;
+import store.domain.vo.PromotionQueryResult;
+import store.domain.vo.*;
 import store.service.dto.PromotionCommandResponse;
 
 /**
@@ -11,6 +13,9 @@ import store.service.dto.PromotionCommandResponse;
 public class AddFreePromotionStrategy implements PromotionStrategy {
     @Override
     public PromotionCommandResponse apply(Order order, Inventory inventory, Promotion promotion) {
-        return null;
+        Quantity summed = order.quantity().sum(promotion.getQuantity());
+        Order resultOrder = new Order(order.productName(), summed);
+        PromotionQueryResult promotionQueryResult = promotion.getQueryResult(resultOrder.quantity());
+        return new PromotionCommandResponse(resultOrder, promotionQueryResult.gifted());
     }
 }
