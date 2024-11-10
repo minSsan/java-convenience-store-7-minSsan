@@ -30,6 +30,11 @@ class OrderValidatorTest {
 
     class FixedProductRepository implements ProductRepository {
         @Override
+        public List<Product> findAll() {
+            return null;
+        }
+
+        @Override
         public Promotion findPromotionByName(Name name) {
             return null;
         }
@@ -44,7 +49,6 @@ class OrderValidatorTest {
 
         @Override
         public void save(Product product, Promotion promotion) {
-
         }
     }
 
