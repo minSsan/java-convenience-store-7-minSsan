@@ -38,6 +38,13 @@ public record Quantity(int value) {
         return new Quantity(result);
     }
 
+    public static Quantity min(Quantity a, Quantity b) {
+        if (a.value() < b.value()) {
+            return a;
+        }
+        return b;
+    }
+
     @Override
     public String toString() {
         if (value == 0) {

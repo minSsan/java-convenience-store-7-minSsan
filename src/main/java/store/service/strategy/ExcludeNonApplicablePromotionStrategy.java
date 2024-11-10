@@ -13,7 +13,7 @@ import store.service.dto.PromotionCommandResponse;
 public class ExcludeNonApplicablePromotionStrategy implements PromotionStrategy {
     @Override
     public PromotionCommandResponse apply(Order order, Inventory inventory, Promotion promotion) {
-        Quantity quantity = new Quantity(Math.min(order.quantity().value(), inventory.promotion().value()));
+        Quantity quantity = Quantity.min(order.quantity(), inventory.promotion());
 
         PromotionQueryResult query = promotion.getQueryResult(quantity);
         Quantity notAppliedQuantity = order.quantity().subtract(query.applied());

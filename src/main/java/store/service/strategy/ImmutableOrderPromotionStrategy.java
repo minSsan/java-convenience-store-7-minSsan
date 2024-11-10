@@ -13,7 +13,7 @@ import store.service.dto.PromotionCommandResponse;
 public class ImmutableOrderPromotionStrategy implements PromotionStrategy {
     @Override
     public PromotionCommandResponse apply(Order order, Inventory inventory, Promotion promotion) {
-        Quantity quantity = new Quantity(Math.min(order.quantity().value(), inventory.promotion().value()));
+        Quantity quantity = Quantity.min(order.quantity(), inventory.promotion());
         PromotionQueryResult result = promotion.getQueryResult(quantity);
         return new PromotionCommandResponse(order, result.gifted());
     }
