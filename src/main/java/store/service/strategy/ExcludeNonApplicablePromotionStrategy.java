@@ -3,6 +3,8 @@ package store.service.strategy;
 import store.domain.vo.Inventory;
 import store.domain.vo.Order;
 import store.domain.Promotion;
+import store.domain.vo.PromotionQueryResult;
+import store.domain.vo.*;
 import store.service.dto.PromotionCommandResponse;
 
 /**
@@ -11,6 +13,13 @@ import store.service.dto.PromotionCommandResponse;
 public class ExcludeNonApplicablePromotionStrategy implements PromotionStrategy {
     @Override
     public PromotionCommandResponse apply(Order order, Inventory inventory, Promotion promotion) {
-        return null;
+        Quantity quantity = new Quantity(Math.min(order.quantity().value(), inventory.promotion().value()));
+
+        PromotionQueryResult query = promotion.getQueryResult(quantity);
+        Quantity notAppliedQuantity = order.quantity().subtract(query.applied());
+
+        Order resultOrder = new Order(order.productName(), order.quantity().subtract(notAppliedQuantity));
+
+        return new PromotionCommandResponse(resultOrder, query.gifted());
     }
 }
