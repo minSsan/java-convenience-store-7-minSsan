@@ -4,7 +4,6 @@ import store.domain.vo.Product;
 import store.domain.vo.Quantity;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class OrderRepositoryImpl implements OrderRepository {
     private final HashMap<Product, Quantity> items = new HashMap<>();
@@ -26,10 +25,5 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public void deleteAll() {
         items.clear();
-    }
-
-    @Override
-    public Map<Product, Quantity> findAll() {
-        return items;
     }
 }
