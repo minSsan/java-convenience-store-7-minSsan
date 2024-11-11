@@ -64,7 +64,7 @@ public class ReceiptService {
         for (Product product : products) {
             Quantity quantity = orderRepository.findQuantityByProduct(product);
             int notPromotionCount = getNotPromotionCount(product, quantity);
-            notPromotionPrice += notPromotionCount * product.price().value();
+            notPromotionPrice += product.price().multiply(notPromotionCount);
         }
         discountInfo.setMembershipDiscount(notPromotionPrice);
     }
@@ -98,7 +98,7 @@ public class ReceiptService {
         int total = 0;
         for (Product product : products) {
             Quantity quantity = orderRepository.findQuantityByProduct(product);
-            total += product.price().value() * quantity.value();
+            total += product.price().multiply(quantity);
         }
         return total;
     }

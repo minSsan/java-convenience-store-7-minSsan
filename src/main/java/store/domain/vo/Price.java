@@ -3,7 +3,7 @@ package store.domain.vo;
 import store.infrastructure.constant.ExceptionMessage;
 import store.infrastructure.exception.CustomException;
 
-public record Price(int value) {
+public record Price(int value) implements Comparable<Price> {
     public static final int MIN = 10;
     public static final int MAX = 1_000_000;
 
@@ -31,8 +31,21 @@ public record Price(int value) {
             return (Integer) o == value;
         }
         if (o instanceof Price) {
-            return ((Price) o).value() == value;
+            return ((Price) o).value == value;
         }
         return false;
+    }
+
+    @Override
+    public int compareTo(Price other) {
+        return value - other.value;
+    }
+
+    public int multiply(Quantity quantity) {
+        return quantity.value() * value;
+    }
+
+    public int multiply(int other) {
+        return other * value;
     }
 }

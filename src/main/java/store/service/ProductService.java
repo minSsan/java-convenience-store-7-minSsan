@@ -58,7 +58,8 @@ public class ProductService {
     }
 
     private void updatePromotionInventory(Product product, Quantity quantity, Inventory inventory) {
-        if (quantity.value() > inventory.promotion().value()) {
+        Quantity promotionQuantity = inventory.promotion();
+        if (quantity.isGreaterThan(promotionQuantity)) {
             Quantity usedNormalQuantity = quantity.subtract(inventory.promotion());
             Quantity remainNormalQuantity = inventory.normal().subtract(usedNormalQuantity);
             inventoryRepository.save(product.name(), new Inventory(Quantity.ZERO, remainNormalQuantity));

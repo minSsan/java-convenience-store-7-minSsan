@@ -1,5 +1,6 @@
 package store.domain;
 
+import store.domain.vo.Price;
 import store.domain.vo.Product;
 import store.domain.vo.Quantity;
 import store.infrastructure.constant.Membership;
@@ -42,7 +43,9 @@ public class DiscountInfo {
     public int getTotalPromotionDiscount() {
         int total = 0;
         for (Product product : promotion.keySet()) {
-            total += product.price().value() * promotion.get(product).value();
+            Price price = product.price();
+            Quantity count = promotion.get(product);
+            total += price.multiply(count);
         }
         return total;
     }

@@ -28,7 +28,7 @@ public class OrderValidator {
     private void validateExceed(List<Order> orders) {
         orders.forEach(order -> {
             Inventory inventory = inventoryRepository.findByProductName(order.productName());
-            if (order.quantity().value() > inventory.getTotal()) {
+            if (order.quantity().isGreaterThan(inventory.getTotal())) {
                 throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
             }
         });

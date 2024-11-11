@@ -11,7 +11,7 @@ public record Promotion(Name name, Quantity buyQuantity, Quantity getQuantity, L
     public static final int GET = 1;
 
     public Promotion {
-        validateGet(getQuantity.value());
+        validateGet(getQuantity);
         validateDate(start, end);
     }
 
@@ -19,8 +19,8 @@ public record Promotion(Name name, Quantity buyQuantity, Quantity getQuantity, L
         return new Promotion(new Name(name), new Quantity(buy), new Quantity(get), start, end);
     }
 
-    private void validateGet(int get) {
-        if (get != GET) {
+    private void validateGet(Quantity get) {
+        if (!get.isSameWith(GET)) {
             throw new IllegalStateException(ExceptionMessage.WRONG_PROMOTION_GET_COUNT.message());
         }
     }
@@ -48,35 +48,35 @@ public record Promotion(Name name, Quantity buyQuantity, Quantity getQuantity, L
     }
 
     public PromotionOption getPromotionOption(Quantity quantity, Inventory inventory) {
-        if (!isApplicable() || quantity.value() > inventory.getTotal()) return PromotionOption.NONE;
+        if (!isApplicable() || quantity.isGreaterThan(inventory.getTotal())) return PromotionOption.NONE;
 
         PromotionQueryResult queryResult = getQueryResult(Quantity.min(quantity, inventory.promotion()));
         if (isPossibleAddFree(quantity, inventory, queryResult.nonApplied())) {
             return PromotionOption.ADD_FREE;
         }
-        if (quantity.subtract(queryResult.applied()).value() > 0) {
+        if (quantity.subtract(queryResult.applied()).isGreaterThan(0)) {
             return PromotionOption.REGULAR_PURCHASE;
         }
         return PromotionOption.NONE;
     }
 
     private boolean isPossibleAddFree(Quantity quantity, Inventory inventory, Quantity notApplied) {
+        Quantity added = quantity.sum(getQuantity);
+        Quantity promotionQuantity = inventory.promotion();
         return notApplied.equals(buyQuantity)
-                 && quantity.sum(getQuantity).value() <= inventory.promotion().value();
+                && (added.isSmallerThan(promotionQuantity) || added.isSameWith(promotionQuantity));
     }
 
     private Quantity getGiftedQuantity(Quantity quantity) {
         if (!this.isApplicable()) {
             return Quantity.ZERO;
         }
-        final int promotionUnitCount = buyQuantity.sum(getQuantity).value();
-
-        final int appliedCount = quantity.value() / promotionUnitCount;
-        return new Quantity(appliedCount);
+        Quantity promotionUnitCount = buyQuantity.sum(getQuantity);
+        return quantity.division(promotionUnitCount);
     }
 
     private Quantity getAppliedQuantity(Quantity giftQuantity) {
-        final int promotionUnitCount = buyQuantity.sum(getQuantity).value();
-        return new Quantity(giftQuantity.value() * promotionUnitCount);
+        Quantity promotionUnitCount = buyQuantity.sum(getQuantity);
+        return giftQuantity.multiply(promotionUnitCount);
     }
 }
