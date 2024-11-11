@@ -12,6 +12,7 @@ import store.domain.vo.PromotionOption;
 public record PromotionQueryResponse(
         PromotionOption option,
         Quantity giftQuantity,
-        Quantity appliedQuantity
+        Quantity appliedQuantity,
+        Quantity notAppliedQuantity
 ) {
 }

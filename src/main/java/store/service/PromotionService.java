@@ -7,6 +7,7 @@ import store.domain.vo.PromotionQueryResult;
 import store.domain.vo.*;
 import store.repository.inventory.InventoryRepository;
 import store.repository.product.ProductRepository;
+import store.service.dto.ApplyPromotionRequest;
 import store.service.dto.PromotionCommandResponse;
 import store.service.dto.PromotionQueryResponse;
 import store.domain.vo.PromotionOption;
@@ -26,18 +27,21 @@ public class PromotionService {
 
     public PromotionQueryResponse query(Order order) {
         if (!isExistApplicablePromotion(order.productName())) {
-            return new PromotionQueryResponse(PromotionOption.NONE, Quantity.ZERO, Quantity.ZERO);
+            return new PromotionQueryResponse(PromotionOption.NONE, Quantity.ZERO, Quantity.ZERO, order.quantity());
         }
         Promotion promotion = productRepository.findPromotionByName(order.productName());
         Inventory inventory = inventoryRepository.findByProductName(order.productName());
-
         Quantity applyQuantity = Quantity.min(order.quantity(), inventory.promotion());
         PromotionQueryResult result = promotion.getQueryResult(applyQuantity);
         PromotionOption promotionOption = promotion.getPromotionOption(applyQuantity, inventory);
-        return new PromotionQueryResponse(promotionOption, result.gifted(), result.applied());
+        Quantity notAppliedQuantity = order.quantity().subtract(result.applied());
+        return new PromotionQueryResponse(promotionOption, result.gifted(), result.applied(), notAppliedQuantity);
     }
 
-    public PromotionCommandResponse command(Order order, PromotionStrategy promotionStrategy) {
+    public PromotionCommandResponse command(ApplyPromotionRequest request) {
+        Order order = request.order();
+        PromotionStrategy promotionStrategy = request.strategy();
+
         Promotion promotion = productRepository.findPromotionByName(order.productName());
         Inventory inventory = inventoryRepository.findByProductName(order.productName());
         return promotionStrategy.apply(order, inventory, promotion);
