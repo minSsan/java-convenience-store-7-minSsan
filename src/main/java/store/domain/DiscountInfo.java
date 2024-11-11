@@ -5,10 +5,12 @@ import store.domain.vo.Product;
 import store.domain.vo.Quantity;
 import store.infrastructure.constant.Membership;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 public class DiscountInfo {
-    private final HashMap<Product, Quantity> promotion;
+    private final Map<Product, Quantity> promotion;
     private Integer membership;
 
     public DiscountInfo() {
@@ -33,13 +35,6 @@ public class DiscountInfo {
         this.membership = Math.min(total * Membership.DISCOUNT_RATE / 100, Membership.MAX);
     }
 
-    public int getPromotionCount(Product product) {
-        if (promotion.get(product) == null) {
-            return 0;
-        }
-        return promotion.get(product).value();
-    }
-
     public int getTotalPromotionDiscount() {
         int total = 0;
         for (Product product : promotion.keySet()) {
@@ -50,8 +45,8 @@ public class DiscountInfo {
         return total;
     }
 
-    public HashMap<Product, Quantity> getPromotionResult() {
-        return promotion;
+    public Map<Product, Quantity> getPromotionResult() {
+        return Collections.unmodifiableMap(promotion);
     }
 
     public int getMembershipDiscount() {
