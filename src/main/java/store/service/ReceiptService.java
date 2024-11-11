@@ -52,6 +52,9 @@ public class ReceiptService {
         if (product == null) {
             throw new IllegalStateException(String.format("%s는 존재하지 않는 상품입니다.", name.value()));
         }
+        if (quantity.equals(Quantity.ZERO)) {
+            return;
+        }
         discountInfo.addPromotionDiscount(product, quantity);
     }
 
