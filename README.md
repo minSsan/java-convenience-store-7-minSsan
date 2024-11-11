@@ -1,5 +1,7 @@
 # java-convenience-store-precourse
 
+### [📒 노트](https://github.com/minSsan/java-convenience-store-7-minSsan/blob/main/NOTE.md)
+
 # 프로젝트 목표
 
 - 기존 설계(ex. 헥사고날)가 아닌, 스스로 아키텍처를 설계하고 적용한다.
