@@ -1,6 +1,5 @@
 package store.view;
 
-import store.domain.ProductInfo;
 import store.infrastructure.constant.Delimiter;
 import store.infrastructure.constant.Message;
 import store.infrastructure.constant.ValueLength;
@@ -23,14 +22,15 @@ public class OutputView {
     }
 
     public void printWelcome() {
-        System.out.println("안녕하세요. W편의점입니다.");
+        System.out.printf("안녕하세요. %s입니다." + Message.NEW_LINE, Message.STORE_NAME);
     }
 
     public void printProducts(ProductViewRequest request) {
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer stringBuffer = new StringBuffer("현재 보유하고 있는 상품입니다." + Message.NEW_LINE + Message.NEW_LINE);
         request.productInfoDtos.forEach(productInfo -> {
             stringBuffer.append(productInfoText(productInfo));
         });
+        stringBuffer.append(Message.NEW_LINE);
         System.out.print(stringBuffer);
     }
 
