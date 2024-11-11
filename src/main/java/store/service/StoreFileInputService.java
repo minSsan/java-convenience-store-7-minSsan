@@ -24,6 +24,7 @@ import java.util.List;
 public class StoreFileInputService {
     private static final String PROMOTION_PATH = "src/main/resources/promotions.md";
     private static final String PRODUCT_PATH = "src/main/resources/products.md";
+    private static final String NULL_INPUT = "null";
 
     private final ProductRepository productRepository;
     private final PromotionRepository promotionRepository;
@@ -124,7 +125,7 @@ public class StoreFileInputService {
     }
 
     private void saveInventory(Product product, Quantity quantity, Name promotionName) {
-        if (promotionName.equals("null")) {
+        if (promotionName.equals(NULL_INPUT)) {
             Inventory inventory = inventoryRepository.findByProductName(product.name()).sumNormal(quantity);
             inventoryRepository.save(product.name(), inventory);
             return;
@@ -135,7 +136,7 @@ public class StoreFileInputService {
     }
 
     private void saveProduct(Product product, Name promotionName) {
-        if (promotionName.equals("null")) {
+        if (promotionName.equals(NULL_INPUT)) {
             final boolean isExist = productRepository.findByName(product.name()) != null;
             if (!isExist) {
                 productRepository.save(product, null);
