@@ -7,9 +7,9 @@ import store.domain.vo.PromotionQueryResult;
 import store.domain.vo.*;
 import store.repository.inventory.InventoryRepository;
 import store.repository.product.ProductRepository;
-import store.service.dto.ApplyPromotionRequest;
-import store.service.dto.PromotionCommandResponse;
-import store.service.dto.PromotionQueryResponse;
+import store.service.dto.request.ApplyPromotionRequest;
+import store.service.dto.response.PromotionCommandResponse;
+import store.service.dto.response.PromotionQueryResponse;
 import store.domain.vo.PromotionOption;
 import store.service.strategy.PromotionStrategy;
 

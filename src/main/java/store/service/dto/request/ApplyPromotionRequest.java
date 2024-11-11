@@ -1,4 +1,4 @@
-package store.service.dto;
+package store.service.dto.request;
 
 import store.domain.vo.Order;
 import store.service.strategy.PromotionStrategy;

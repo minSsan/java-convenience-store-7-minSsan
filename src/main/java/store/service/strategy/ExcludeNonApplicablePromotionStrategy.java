@@ -5,7 +5,7 @@ import store.domain.vo.Order;
 import store.domain.Promotion;
 import store.domain.vo.PromotionQueryResult;
 import store.domain.vo.*;
-import store.service.dto.PromotionCommandResponse;
+import store.service.dto.response.PromotionCommandResponse;
 
 /**
  * 프로모션 적용 불가능 제품을 주문에서 제외하는 전략

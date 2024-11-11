@@ -7,7 +7,7 @@ import store.domain.vo.Inventory;
 import store.domain.vo.Name;
 import store.domain.vo.Order;
 import store.domain.vo.Quantity;
-import store.service.dto.PromotionCommandResponse;
+import store.service.dto.response.PromotionCommandResponse;
 
 import java.time.LocalDate;
 

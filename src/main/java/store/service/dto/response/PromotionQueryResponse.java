@@ -1,4 +1,4 @@
-package store.service.dto;
+package store.service.dto.response;
 
 import store.domain.vo.Quantity;
 import store.domain.vo.PromotionOption;
