@@ -46,6 +46,9 @@ public record Price(int value) implements Comparable<Price> {
     }
 
     public int multiply(int other) {
+        if (other <= 0) {
+            throw new IllegalStateException("0 이하의 숫자는 가격에 곱할 수 없습니다.");
+        }
         return other * value;
     }
 }
