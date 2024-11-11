@@ -4,9 +4,15 @@ import store.domain.vo.Product;
 import store.domain.vo.Quantity;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class OrderRepositoryImpl implements OrderRepository {
     private final HashMap<Product, Quantity> items = new HashMap<>();
+
+    @Override
+    public Map<Product, Quantity> findAll() {
+        return Map.copyOf(items);
+    }
 
     @Override
     public Quantity findQuantityByProduct(Product product) {
