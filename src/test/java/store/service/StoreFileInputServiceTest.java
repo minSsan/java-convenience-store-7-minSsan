@@ -115,7 +115,7 @@ class StoreFileInputServiceTest {
             Promotion foundPromotion = productRepository.findPromotionByName(product.name());
             Inventory foundInventory = inventoryRepository.findByProductName(product.name());
 
-            assertThat(foundProduct).isNotNull();
+            assertThat(foundProduct).isEqualTo(product);
             assertThat(foundPromotion).isEqualTo(promotions.get(product.name()).getPromotion());
             assertThat(foundInventory).isEqualTo(inventory.get(product.name()));
         });
