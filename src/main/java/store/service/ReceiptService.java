@@ -74,10 +74,8 @@ public class ReceiptService {
         if (promotion == null) {
             return orderQuantity.value();
         }
-        final int promotionCount = discountInfo.getPromotionCount(product);
-        final int promotionBundle = promotion.buyQuantity().value() + promotion.getQuantity().value();
-        final int promotionQuantity = promotionCount * promotionBundle;
-        return orderQuantity.value() - promotionQuantity;
+        PromotionQueryResult queryResult = promotion.getQueryResult(orderQuantity);
+        return queryResult.nonApplied().value();
     }
 
     public Map<Product, Quantity> getOrderResult() {
